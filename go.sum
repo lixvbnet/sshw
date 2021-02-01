@@ -7,8 +7,8 @@ github.com/juju/ansiterm v0.0.0-20180109212912-720a0952cc2a/go.mod h1:UJSiEoRfvx
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/lixvbnet/sshlib v0.0.0-20210124102456-75b5ad0efed8 h1:q+HFj4JNaFZOOR0RlXH8RxwcPQzyR8vnffWektCkdpM=
-github.com/lixvbnet/sshlib v0.0.0-20210124102456-75b5ad0efed8/go.mod h1:LbOiEMmT+ixXMnz5hl/lm2z6X/BChX14Wczhn+N+PBA=
+github.com/lixvbnet/sshlib v0.0.0-20210201035018-16acc319a54e h1:i8yNdK9V9t0fBn/69Akm/Cq/5+a321iBIFk6HUF3Szo=
+github.com/lixvbnet/sshlib v0.0.0-20210201035018-16acc319a54e/go.mod h1:KOg9UKwS9fx9sJAqEywUVIXbXwDIiEsFHQ1Ed0pbqgU=
 github.com/lunixbochs/vtclean v0.0.0-20180621232353-2d01aacdc34a h1:weJVJJRzAJBFRlAiJQROKQs8oC9vOxvm4rZmBBk0ONw=
 github.com/lunixbochs/vtclean v0.0.0-20180621232353-2d01aacdc34a/go.mod h1:pHhQNgMf3btfWnGBVipUOjRYhoOsdGqdm/+2c2E2WMI=
 github.com/manifoldco/promptui v0.8.0 h1:R95mMF+McvXZQ7j1g8ucVZE1gLP3Sv6j9vlF9kyRqQo=
