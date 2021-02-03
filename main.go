@@ -100,15 +100,14 @@ func getNodeFromArgs(config *sshlib.Config) *sshlib.Node {
 	if !strings.Contains(target, "@") {
 		node = findAlias(config.Nodes, target)
 	}
-
-	// login by args
 	if node == nil {
 		node = new(sshlib.Node)
-		node.SetDefaults(config.Defaults, config.Settings)
-		node.Host = target
 	}
 
-	if strings.Contains(target, "@") {
+	// login by args
+	if !strings.Contains(target, "@") {
+		node.Host = target
+	} else {
 		arr := strings.Split(target, "@")
 		node.Host = arr[1]
 		// try as alias
@@ -123,6 +122,7 @@ func getNodeFromArgs(config *sshlib.Config) *sshlib.Node {
 			node.User = arr[0]
 		}
 	}
+	node.SetDefaults(config.Defaults, config.Settings)
 	return node
 }
 
