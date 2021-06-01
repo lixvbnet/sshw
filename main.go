@@ -13,6 +13,7 @@ import (
 var (
 	H     = flag.Bool("h", false, "show help and exit")
 	P     = flag.Int("p", 0, "port")
+	U     = flag.String("u", "", "user")
 	PASS  = flag.Bool("pass", false, "enter password promptly")
 
 	templates = &promptui.SelectTemplates{
@@ -54,6 +55,10 @@ func main() {
 
 	if *P > 0 {
 		node.Port = *P
+	}
+
+	if *U != "" {
+		node.User = *U
 	}
 
 	if *PASS {
