@@ -48,7 +48,7 @@ func TestLoadConfig(t *testing.T) {
 	}
 	fmt.Println(config)
 
-	config, err = LoadConfig(".sshw.yml")
+	config, err = LoadConfig("config_example.yml")
 	if err != nil {
 		fmt.Println(err)
 	}

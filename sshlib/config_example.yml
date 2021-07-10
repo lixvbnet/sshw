@@ -1,0 +1,21 @@
+settings:
+  domain: example.com
+  logins:
+    - user: admin
+      password: password
+
+default:
+  user: root
+  password: 123456
+
+
+nodes:
+  - name: nodeA
+    alias: nodeA
+    host: 192.168.1.10
+
+  - name: nodeB
+    alias: nodeB
+    host: 192.168.1.11
+    user: root
+    password: Password
