@@ -40,21 +40,34 @@ func main() {
 		return
 	}
 
+	var pass string
+	if *PASS {
+		prompt := promptui.Prompt{
+			Label: "Enter password",
+			Mask: '*',
+		}
+		password, err := prompt.Run()
+		if err != nil {
+			log.Fatal(err)
+		}
+		pass = password
+	}
+
+	var target string
+	if len(flag.Args()) > 0 {
+		target = flag.Arg(0)
+	}
+
 	config, err := sshlib.LoadConfig(".sshw.yml")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	node := getNodeFromArgs(config)
-	if node == nil {
-		node = choose(config.Nodes)
-	}
+	// Get Node
+	node := GetNode(config, target, *P, *U, pass)
 	if node == nil {
 		return
 	}
-
-	overrideWithFlags(node)
-	node.SetDefaults(config.Defaults, config.Settings)
 
 	// Login using node
 	client := &sshlib.SSHClient{
@@ -76,33 +89,32 @@ func main() {
 	client.Wait()
 }
 
-func overrideWithFlags(node *sshlib.Node) {
-	if *P > 0 {
-		node.Port = *P
+func GetNode(config *sshlib.Config, target string, port int, user string, password string) (node *sshlib.Node) {
+	node = getNodeFromTarget(config, target)
+	if node == nil {
+		node = choose(config.Nodes)
+	}
+	if node == nil {
+		return
 	}
 
-	if *U != "" {
-		node.User = *U
+	if port > 0 {
+		node.Port = port
 	}
-
-	if *PASS {
-		prompt := promptui.Prompt{
-			Label: "Enter password",
-			Mask: '*',
-		}
-		password, err := prompt.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
+	if user != "" {
+		node.User = user
+	}
+	if password != "" {
 		node.Password = password
 	}
+	node.SetDefaults(config.Defaults, config.Settings)
+	return node
 }
 
-func getNodeFromArgs(config *sshlib.Config) *sshlib.Node {
-	if len(flag.Args()) < 1 {
+func getNodeFromTarget(config *sshlib.Config, target string) *sshlib.Node {
+	if target == "" {
 		return nil
 	}
-	target := flag.Arg(0)
 
 	var node *sshlib.Node
 
