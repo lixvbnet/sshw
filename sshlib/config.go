@@ -59,17 +59,17 @@ func (n *Node) SetDefaults(defaults *Node, settings *Settings) {
 			n.User = "root"
 		}
 	}
-	if n.Password == "" {
-		if defaults != nil && defaults.Password != "" {
-			n.Password = defaults.Password
-		}
-	}
 	if settings != nil && settings.Logins != nil {
 		for _, login := range settings.Logins {
 			if n.User == login.User {
-				CoverDefaultsOverride(n, login)
+				CoverDefaults(n, login)
 				break
 			}
+		}
+	}
+	if n.Password == "" {
+		if defaults != nil && defaults.Password != "" {
+			n.Password = defaults.Password
 		}
 	}
 }
