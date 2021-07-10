@@ -54,6 +54,7 @@ func main() {
 	}
 
 	overrideWithFlags(node)
+	node.SetDefaults(config.Defaults, config.Settings)
 
 	// Login using node
 	client := &sshlib.SSHClient{
@@ -130,8 +131,6 @@ func getNodeFromArgs(config *sshlib.Config) *sshlib.Node {
 			}
 		}
 	}
-	overrideWithFlags(node)
-	node.SetDefaults(config.Defaults, config.Settings)
 	return node
 }
 

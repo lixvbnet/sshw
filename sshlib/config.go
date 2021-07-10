@@ -17,11 +17,11 @@ type Config struct {
 }
 
 // SetDefaults sets sensible values for unset fields in each node
-func (c *Config) SetDefaults() {
-	for _, node := range c.Nodes {
-		node.SetDefaults(c.Defaults, c.Settings)
-	}
-}
+//func (c *Config) SetDefaults() {
+//	for _, node := range c.Nodes {
+//		node.SetDefaults(c.Defaults, c.Settings)
+//	}
+//}
 
 type Settings struct {
 	Domain		string		`yaml:"domain"`
@@ -141,7 +141,7 @@ func LoadConfig(filenames ...string) (config *Config, err error) {
 	if err != nil {
 		return
 	}
-	config.SetDefaults()
+	//config.SetDefaults()
 	return config, nil
 }
 
