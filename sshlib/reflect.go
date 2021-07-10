@@ -10,6 +10,16 @@ const debug = false
 // CoverDefaults assigns default values to zero-valued fields in node.
 // The two arguments should be of the same type.
 func CoverDefaults(node interface{}, defaults interface{}) {
+	coverDefaults(node, defaults, false)
+}
+
+// CoverDefaultsOverride override node values for all non-zero fields in defaults.
+// The two arguments should be of the same type.
+func CoverDefaultsOverride(node interface{}, defaults interface{}) {
+	coverDefaults(node, defaults, true)
+}
+
+func coverDefaults(node interface{}, defaults interface{}, override bool) {
 	val := reflect.ValueOf(node).Elem()
 	valDefaults := reflect.ValueOf(defaults).Elem()
 
@@ -22,13 +32,15 @@ func CoverDefaults(node interface{}, defaults interface{}) {
 		}
 
 		defaultValueField := valDefaults.FieldByName(name)
-		// set to default if not set
-		if valueField.IsZero() && !defaultValueField.IsZero() {
-			if debug {
-				fmt.Print("Set to default value ", defaultValueField.Interface())
+		if !defaultValueField.IsZero() {
+			if override || valueField.IsZero() {
+				if debug {
+					fmt.Print("Set to default value ", defaultValueField.Interface())
+				}
+				valueField.Set(defaultValueField)
 			}
-			valueField.Set(defaultValueField)
 		}
+
 		if debug {
 			fmt.Println()
 		}

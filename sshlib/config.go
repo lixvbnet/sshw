@@ -25,6 +25,7 @@ func (c *Config) SetDefaults() {
 
 type Settings struct {
 	Domain		string		`yaml:"domain"`
+	Logins		[]*Node		`yaml:"logins"`
 }
 
 type Node struct {
@@ -61,6 +62,14 @@ func (n *Node) SetDefaults(defaults *Node, settings *Settings) {
 	if n.Password == "" {
 		if defaults != nil && defaults.Password != "" {
 			n.Password = defaults.Password
+		}
+	}
+	if settings != nil && settings.Logins != nil {
+		for _, login := range settings.Logins {
+			if n.User == login.User {
+				CoverDefaultsOverride(n, login)
+				break
+			}
 		}
 	}
 }
