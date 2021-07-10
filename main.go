@@ -53,25 +53,7 @@ func main() {
 		return
 	}
 
-	if *P > 0 {
-		node.Port = *P
-	}
-
-	if *U != "" {
-		node.User = *U
-	}
-
-	if *PASS {
-		prompt := promptui.Prompt{
-			Label: "Enter password",
-			Mask: '*',
-		}
-		password, err := prompt.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-		node.Password = password
-	}
+	overrideWithFlags(node)
 
 	// Login using node
 	client := &sshlib.SSHClient{
@@ -91,6 +73,28 @@ func main() {
 	}
 
 	client.Wait()
+}
+
+func overrideWithFlags(node *sshlib.Node) {
+	if *P > 0 {
+		node.Port = *P
+	}
+
+	if *U != "" {
+		node.User = *U
+	}
+
+	if *PASS {
+		prompt := promptui.Prompt{
+			Label: "Enter password",
+			Mask: '*',
+		}
+		password, err := prompt.Run()
+		if err != nil {
+			log.Fatal(err)
+		}
+		node.Password = password
+	}
 }
 
 func getNodeFromArgs(config *sshlib.Config) *sshlib.Node {
@@ -126,6 +130,7 @@ func getNodeFromArgs(config *sshlib.Config) *sshlib.Node {
 			}
 		}
 	}
+	overrideWithFlags(node)
 	node.SetDefaults(config.Defaults, config.Settings)
 	return node
 }

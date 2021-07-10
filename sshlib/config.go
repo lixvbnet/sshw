@@ -41,7 +41,6 @@ type Node struct {
 
 // SetDefaults sets sensible values for unset fields in node
 func (n *Node) SetDefaults(defaults *Node, settings *Settings) {
-	CoverDefaults(n, defaults)
 	if !validHost(n.Host) && settings != nil && settings.Domain != "" {
 		n.Host += "." + settings.Domain
 	}
@@ -72,6 +71,7 @@ func (n *Node) SetDefaults(defaults *Node, settings *Settings) {
 			n.Password = defaults.Password
 		}
 	}
+	CoverDefaults(n, defaults)
 }
 
 func validHost(host string) bool {
