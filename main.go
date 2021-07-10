@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/lixvbnet/sshlib"
+	"github.com/lixvbnet/sshw/sshlib"
 	"github.com/manifoldco/promptui"
 	"log"
 	"os"
