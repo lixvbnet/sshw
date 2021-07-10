@@ -6,51 +6,41 @@ import (
 )
 
 var (
-	settings = &Settings{Domain: "example.com"}
+	config = &Config{
+		Settings: &Settings{
+			Domain: "example.com",
+			Logins: []*Node{
+				{
+					User:     "admin",
+					Password: "PassAdminNew",
+				},
+			},
+		},
 
-	defaults = &Node{
-		Name:           "",
-		Alias:          "",
-		Host:           "",
-		Port:           0,
-		User:           "root",
-		Password:       "PASSWORD",
-		KeyPath:        "",
-		Passphrase:     "",
-	}
+		Defaults: &Node{
+			Port:     0,
+			User:     "root",
+			Password: "PASSWORD",
+		},
 
-	node = &Node{
-		Name:           "dev_local",
-		Alias:          "dev",
-		Host:           "hostA",
-		Port:           0,
-		User:           "",
-		Password:       "pass",
-		KeyPath:        "some_key_path",
-		Passphrase:     "",
+		Nodes: []*Node{
+			{
+				Name:       "nodeA",
+				Alias:      "nodeA",
+				Host:       "hostA",
+				KeyPath:    "key_path_A",
+				Passphrase: "",
+			},
+			{
+				Name:     "nodeB",
+				Alias:    "nodeB",
+				Host:     "hostB",
+				Password: "passB",
+			},
+		},
 	}
 )
 
-func TestSetDefaults(t *testing.T) {
-	node.SetDefaults(defaults, settings)
-
-	fmt.Println(node)
-	if node.User != "root" || node.Password != "pass" {
-		t.Errorf("Error: node.User=%s, node.Password=%s", node.User, node.Password)
-	}
-}
-
-func TestLoadConfig(t *testing.T) {
-	var config *Config
-	config, err := LoadConfig("fileNotExist.yml")
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(config)
-
-	config, err = LoadConfig("config_example.yml")
-	if err != nil {
-		fmt.Println(err)
-	}
+func TestPrintConfig(t *testing.T) {
 	fmt.Println(config)
 }

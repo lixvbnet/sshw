@@ -1,6 +1,7 @@
 package sshlib
 
 import (
+	"encoding/json"
 	"fmt"
 	"golang.org/x/crypto/ssh"
 	"gopkg.in/yaml.v2"
@@ -14,6 +15,14 @@ type Config struct {
 	Settings	*Settings 	`yaml:"settings"`
 	Defaults	*Node  		`yaml:"default"`
 	Nodes		[]*Node  	`yaml:"nodes"`
+}
+
+func (c *Config) String() string {
+	b, err := json.MarshalIndent(c, "", "  ")
+	if err != nil {
+		return err.Error()
+	}
+	return string(b)
 }
 
 // SetDefaults sets sensible values for unset fields in each node
