@@ -41,6 +41,14 @@ type Node struct {
 	Passphrase     string           `yaml:"passphrase"`
 }
 
+func (n *Node) String() string {
+	b, err := json.MarshalIndent(n, "", "  ")
+	if err != nil {
+		return err.Error()
+	}
+	return string(b)
+}
+
 // SetDefaults sets sensible values for unset fields in node
 func (n *Node) SetDefaults(defaults *Node, settings *Settings) {
 	if defaults == nil {
