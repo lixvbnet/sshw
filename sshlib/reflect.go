@@ -7,19 +7,10 @@ import (
 
 const debug = false
 
-// CoverDefaults assigns default values to zero-valued fields in node.
+// CoverDefaults assigns default values to zero-valued fields in node if override is set to false.
+// It overrides node values for all non-zero fields in defaults if override is set to true.
 // The two arguments should be of the same type.
-func CoverDefaults(node interface{}, defaults interface{}) {
-	coverDefaults(node, defaults, false)
-}
-
-// CoverDefaultsOverride override node values for all non-zero fields in defaults.
-// The two arguments should be of the same type.
-func CoverDefaultsOverride(node interface{}, defaults interface{}) {
-	coverDefaults(node, defaults, true)
-}
-
-func coverDefaults(node interface{}, defaults interface{}, override bool) {
+func CoverDefaults(node interface{}, defaults interface{}, override bool) {
 	val := reflect.ValueOf(node).Elem()
 	valDefaults := reflect.ValueOf(defaults).Elem()
 

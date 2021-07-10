@@ -25,13 +25,6 @@ func (c *Config) String() string {
 	return string(b)
 }
 
-// SetDefaults sets sensible values for unset fields in each node
-//func (c *Config) SetDefaults() {
-//	for _, node := range c.Nodes {
-//		node.SetDefaults(c.Defaults, c.Settings)
-//	}
-//}
-
 type Settings struct {
 	Domain		string		`yaml:"domain"`
 	Logins		[]*Node		`yaml:"logins"`
@@ -50,37 +43,33 @@ type Node struct {
 
 // SetDefaults sets sensible values for unset fields in node
 func (n *Node) SetDefaults(defaults *Node, settings *Settings) {
+	if defaults == nil {
+		defaults = new(Node)
+	}
+	if defaults.Port <= 0 {
+		defaults.Port = 22
+	}
+	if defaults.User == "" {
+		defaults.User = "root"
+	}
+	CoverDefaults(n, defaults, false)
+
 	if !validHost(n.Host) && settings != nil && settings.Domain != "" {
 		n.Host += "." + settings.Domain
 	}
-	if n.Port <= 0 {
-		if defaults != nil && defaults.Port > 0 {
-			n.Port = defaults.Port
-		} else {
-			n.Port = 22
-		}
-	}
-	if n.User == "" {
-		if defaults != nil && defaults.User != "" {
-			n.User = defaults.User
-		} else {
-			n.User = "root"
-		}
-	}
-	if settings != nil && settings.Logins != nil {
-		for _, login := range settings.Logins {
+}
+
+// SetLogin sets values for unset fields in node if override is set to false.
+// It overrides node values if override is set to true.
+func (n *Node) SetLogin(logins []*Node, override bool) {
+	if logins != nil {
+		for _, login := range logins {
 			if n.User == login.User {
-				CoverDefaults(n, login)
+				CoverDefaults(n, login, override)
 				break
 			}
 		}
 	}
-	if n.Password == "" {
-		if defaults != nil && defaults.Password != "" {
-			n.Password = defaults.Password
-		}
-	}
-	CoverDefaults(n, defaults)
 }
 
 func validHost(host string) bool {
@@ -150,7 +139,6 @@ func LoadConfig(filenames ...string) (config *Config, err error) {
 	if err != nil {
 		return
 	}
-	//config.SetDefaults()
 	return config, nil
 }
 

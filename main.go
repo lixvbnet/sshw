@@ -40,7 +40,10 @@ func main() {
 		return
 	}
 
-	var pass string
+	// get overrider from options(flags) [overrider has top priority]
+	overrider := new(sshlib.Node)
+	overrider.Port = *P
+	overrider.User = *U
 	if *PASS {
 		prompt := promptui.Prompt{
 			Label: "Enter password",
@@ -50,7 +53,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		pass = password
+		overrider.Password = password
 	}
 
 	var target string
@@ -63,8 +66,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Get Node
-	node := GetNode(config, target, *P, *U, pass)
+	// Get node from target, or choose from menu
+	var chosen *sshlib.Node
+	if target == "" {
+		chosen = choose(config.Nodes)
+	}
+	node := sshlib.GetNode(config, target, chosen, overrider)
 	if node == nil {
 		return
 	}
@@ -89,71 +96,6 @@ func main() {
 	client.Wait()
 }
 
-func GetNode(config *sshlib.Config, target string, port int, user string, password string) (node *sshlib.Node) {
-	node = getNodeFromTarget(config, target)
-	if node == nil {
-		node = choose(config.Nodes)
-	}
-	if node == nil {
-		return
-	}
-
-	if port > 0 {
-		node.Port = port
-	}
-	if user != "" {
-		node.User = user
-	}
-	if password != "" {
-		node.Password = password
-	}
-	node.SetDefaults(config.Defaults, config.Settings)
-	return node
-}
-
-func getNodeFromTarget(config *sshlib.Config, target string) *sshlib.Node {
-	if target == "" {
-		return nil
-	}
-
-	var node *sshlib.Node
-
-	// try as alias
-	if !strings.Contains(target, "@") {
-		node = findAlias(config.Nodes, target)
-	}
-	if node == nil {
-		// login by args
-		node = new(sshlib.Node)
-		if !strings.Contains(target, "@") {
-			node.Host = target
-		} else {
-			arr := strings.Split(target, "@")
-			node.Host = arr[1]
-			// try as alias
-			aliasNode := findAlias(config.Nodes, node.Host)
-			if aliasNode != nil {
-				node = aliasNode
-			}
-			if strings.Contains(arr[0], ":") {		// user:password
-				array := strings.Split(arr[0], ":")
-				node.User, node.Password = array[0], array[1]
-			} else {										// user
-				node.User = arr[0]
-			}
-		}
-	}
-	return node
-}
-
-func findAlias(nodes []*sshlib.Node, nodeAlias string) *sshlib.Node {
-	for _, node := range nodes {
-		if node.Alias == nodeAlias {
-			return node
-		}
-	}
-	return nil
-}
 
 func choose(nodes []*sshlib.Node) *sshlib.Node {
 	prompt := promptui.Select{
@@ -189,6 +131,7 @@ func choose(nodes []*sshlib.Node) *sshlib.Node {
 	}
 	return nodes[index]
 }
+
 
 // BellSkipper implements an io.WriteCloser that skips the terminal bell
 // character (ASCII code 7), and writes the rest to os.Stderr. It is used to
