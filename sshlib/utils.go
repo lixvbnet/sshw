@@ -2,8 +2,9 @@ package sshlib
 
 import "strings"
 
-// Get node from target, or choose from menu, and then override fields with overrider
-// chosen will be ignored if target is not empty
+// Get node from target, or choose from menu, and then override fields with overrider.
+// chosen will be ignored if target is not empty.
+// Values in overrider have top priority.
 func GetNode(config *Config, target string, chosen *Node, overrider *Node) (node *Node) {
 	if target != "" {
 		node = parseTarget(config, target)
@@ -14,14 +15,21 @@ func GetNode(config *Config, target string, chosen *Node, overrider *Node) (node
 		return
 	}
 
+	// override fields with overrider, to make overrider.User visible to following tasks
 	if overrider != nil {
 		CoverDefaults(node, overrider, true)
 	}
+
 	if config != nil {
 		if config.Settings != nil {
 			node.SetLogin(config.Settings.Logins, target == "") // override if target is empty (i.e. using chosen)
 		}
 		node.SetDefaults(config.Defaults, config.Settings)
+	}
+
+	// override fields with overrider again
+	if overrider != nil {
+		CoverDefaults(node, overrider, true)
 	}
 	return node
 }
