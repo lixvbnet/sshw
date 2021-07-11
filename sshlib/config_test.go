@@ -4,8 +4,11 @@ import (
 	"testing"
 )
 
-var (
-	config = &Config{
+// Do NOT modify or pass it to other functions that might do modifications
+var config *Config= getConfig()
+
+func getConfig() *Config {
+	return &Config{
 		Settings: &Settings{
 			Domain: "example.com",
 			Logins: []*Node{
@@ -44,15 +47,15 @@ var (
 			},
 		},
 	}
-)
+}
 
 func TestGetNode(t *testing.T) {
 	var tests = []struct{
 		desc string
 		// input
 		target string
-		chosen *Node
-		overrider *Node
+		chosen Node
+		overrider Node
 		// want
 		want Node
 	}{
@@ -81,7 +84,7 @@ func TestGetNode(t *testing.T) {
 		{
 			desc: "from target, with overrider",
 			target: "user:password@host",
-			overrider: &Node{
+			overrider: Node{
 				Password: "NewPassword",
 				Port: 33,
 			},
@@ -95,7 +98,7 @@ func TestGetNode(t *testing.T) {
 		// from chosen, without overrider
 		{
 			desc: "from chosen, without overrider",
-			chosen: config.Nodes[0],
+			chosen: *(config.Nodes[0]),
 			want: Node{
 				Name: "Node A",
 				Alias: "nodeA",
@@ -107,7 +110,7 @@ func TestGetNode(t *testing.T) {
 		},
 		{
 			desc: "from chosen, without overrider",
-			chosen: config.Nodes[1],
+			chosen: *(config.Nodes[1]),
 			want: Node{
 				Name: "Node B",
 				Alias: "nodeB",
@@ -118,10 +121,25 @@ func TestGetNode(t *testing.T) {
 			},
 		},
 		// from chosen, with overrider
+		//{
+		//	desc: "from chosen, with overrider",
+		//	chosen: *(config.Nodes[0]),
+		//	overrider: Node{
+		//		User: "NewUser",
+		//	},
+		//	want: Node{
+		//		Name: "Node A",
+		//		Alias: "nodeA",
+		//		User: "NewUser",
+		//		Password: "default_password",
+		//		Host: "hostA."+config.Settings.Domain,
+		//		Port: 22,
+		//	},
+		//},
 		{
 			desc: "from chosen, with overrider",
-			chosen: config.Nodes[0],
-			overrider: &Node{
+			chosen: *(config.Nodes[0]),
+			overrider: Node{
 				Password: "NewPassword",
 			},
 			want: Node{
@@ -133,10 +151,11 @@ func TestGetNode(t *testing.T) {
 				Port: 22,
 			},
 		},
+
 		{
 			desc: "from chosen, with overrider",
-			chosen: config.Nodes[2],
-			overrider: &Node{
+			chosen: *(config.Nodes[2]),
+			overrider: Node{
 				User: "admin",
 			},
 			want: Node{
@@ -150,8 +169,8 @@ func TestGetNode(t *testing.T) {
 		},
 		{
 			desc: "from chosen, with overrider",
-			chosen: config.Nodes[2],
-			overrider: &Node{
+			chosen: *(config.Nodes[2]),
+			overrider: Node{
 				User: "admin",
 				Password: "NewPassword",
 			},
@@ -167,7 +186,8 @@ func TestGetNode(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got := GetNode(config, test.target, test.chosen, test.overrider); *got != test.want {
+		c := getConfig()
+		if got := GetNode(c, test.target, &test.chosen, &test.overrider); *got != test.want {
 			t.Errorf("\n//desc: %v\ntarget: %v\nchosen: %v\noverrider: %v\nwant: %v\ngot: %v\n",
 				test.desc, test.target, test.chosen, test.overrider, test.want, got)
 		}
