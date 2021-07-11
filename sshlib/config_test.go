@@ -121,21 +121,21 @@ func TestGetNode(t *testing.T) {
 			},
 		},
 		// from chosen, with overrider
-		//{
-		//	desc: "from chosen, with overrider",
-		//	chosen: *(config.Nodes[0]),
-		//	overrider: Node{
-		//		User: "NewUser",
-		//	},
-		//	want: Node{
-		//		Name: "Node A",
-		//		Alias: "nodeA",
-		//		User: "NewUser",
-		//		Password: "default_password",
-		//		Host: "hostA."+config.Settings.Domain,
-		//		Port: 22,
-		//	},
-		//},
+		{
+			desc: "from chosen, with overrider",
+			chosen: *(config.Nodes[0]),
+			overrider: Node{
+				User: "NewUser",
+			},
+			want: Node{
+				Name: "Node A",
+				Alias: "nodeA",
+				User: "NewUser",
+				Password: "passwordA",
+				Host: "hostA."+config.Settings.Domain,
+				Port: 22,
+			},
+		},
 		{
 			desc: "from chosen, with overrider",
 			chosen: *(config.Nodes[0]),
@@ -151,7 +151,6 @@ func TestGetNode(t *testing.T) {
 				Port: 22,
 			},
 		},
-
 		{
 			desc: "from chosen, with overrider",
 			chosen: *(config.Nodes[2]),
