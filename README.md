@@ -8,7 +8,7 @@ This is a fork of [yinheli/sshw](https://github.com/yinheli/sshw), with the foll
 
 - Support short hostname by setting up domain ( concatenated as `hostname.domain` )
 
-- Command line support
+- Command line arguments support
 
   ```shell
   sshw user:pass@host
