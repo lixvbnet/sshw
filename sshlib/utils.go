@@ -6,7 +6,7 @@ import "strings"
 // chosen will be ignored if target is not empty
 func GetNode(config *Config, target string, chosen *Node, overrider *Node) (node *Node) {
 	if target != "" {
-		node = GetNodeFromTarget(config, target)
+		node = parseTarget(config, target)
 	} else {
 		node = chosen
 	}
@@ -26,7 +26,7 @@ func GetNode(config *Config, target string, chosen *Node, overrider *Node) (node
 	return node
 }
 
-func GetNodeFromTarget(config *Config, target string) *Node {
+func parseTarget(config *Config, target string) *Node {
 	if target == "" {
 		return nil
 	}

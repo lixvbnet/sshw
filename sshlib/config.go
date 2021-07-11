@@ -41,7 +41,7 @@ type Node struct {
 	Passphrase     string           `yaml:"passphrase"`
 }
 
-func (n *Node) String() string {
+func (n Node) String() string {
 	b, err := json.MarshalIndent(n, "", "  ")
 	if err != nil {
 		return err.Error()
