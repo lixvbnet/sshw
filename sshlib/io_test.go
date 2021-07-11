@@ -1,7 +1,6 @@
 package sshlib
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -13,8 +12,6 @@ func TestReadUntil(t *testing.T) {
 	br := NewBufferedReader(r)
 
 	result, err := br.ReadUntil("te")
-	fmt.Println(string(result))
-
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -31,7 +28,8 @@ func TestTeeReader(t *testing.T) {
 	file, _ := os.Create(fileName)
 	defer file.Close(); os.Remove(fileName)
 
-	tr := TeeReader(r, os.Stdout, file)
+	//tr := TeeReader(r, os.Stdout, file)
+	tr := TeeReader(r, file)
 	buf := make([]byte, 4)
 	bytesRead := 0
 	for {
@@ -45,7 +43,6 @@ func TestTeeReader(t *testing.T) {
 		bytesRead += n
 	}
 
-	fmt.Printf("%d bytes read\n", bytesRead)
 	if bytesRead != len(text) {
 		t.Fatalf("%d out of %d read\n", bytesRead, len(text))
 	}
