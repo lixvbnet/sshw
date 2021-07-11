@@ -27,7 +27,7 @@ func GetNode(config *Config, target string, chosen *Node, overrider *Node) (node
 		node.SetDefaults(config.Defaults, config.Settings)
 	}
 
-	// override fields with overrider again
+	// override fields with overrider again, to make it top priority
 	if overrider != nil {
 		CoverDefaults(node, overrider, true)
 	}
