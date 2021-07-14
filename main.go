@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	CMD		string
-	Version	string
+	Name    string
+	Version string
+	GitHash string
 )
 
 var (
@@ -47,7 +48,7 @@ func main() {
 	}
 
 	if *V {
-		fmt.Printf("%s version %s\n", CMD, Version)
+		fmt.Printf("%s version %s (%s)\n", Name, Version, GitHash)
 		return
 	}
 
