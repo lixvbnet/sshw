@@ -11,6 +11,12 @@ import (
 )
 
 var (
+	CMD		string
+	Version	string
+)
+
+var (
+	V     = flag.Bool("v", false, "show version")
 	H     = flag.Bool("h", false, "show help and exit")
 	P     = flag.Int("p", 0, "port")
 	U     = flag.String("u", "", "user")
@@ -37,6 +43,11 @@ func main() {
 
 	if *H {
 		flag.Usage()
+		return
+	}
+
+	if *V {
+		fmt.Printf("%s version %s\n", CMD, Version)
 		return
 	}
 
