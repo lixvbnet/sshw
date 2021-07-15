@@ -39,6 +39,17 @@ func (br BufferedReader) ReadUntil(pattern string) (result []byte, err error) {
 	}
 }
 
+// ReadUntilEOF reads from r one byte at a time until io.EOF
+func (br BufferedReader) ReadUntilEOF() (result []byte) {
+	for {
+		b, err := br.ReadByte()
+		if err == io.EOF {
+			return
+		}
+		result = append(result, b)
+	}
+}
+
 // TeeReader returns an io.Reader that writes to wList what it reads from r.
 func TeeReader(r io.Reader, wList ...io.Writer) io.Reader {
 	mw := io.MultiWriter(wList...)

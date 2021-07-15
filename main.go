@@ -22,6 +22,7 @@ var (
 	P     = flag.Int("p", 0, "port")
 	U     = flag.String("u", "", "user")
 	PASS  = flag.Bool("pass", false, "enter password promptly")
+	T     = flag.Bool("t", false, "request terminal")
 
 	templates = &promptui.SelectTemplates{
 		Label:    "✨ {{ . | green}}",
@@ -32,7 +33,7 @@ var (
 
 func main() {
 	flag.Usage = func() {
-		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] [target]\n", os.Args[0])
+		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] [target] [command]\n", os.Args[0])
 		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "options\n")
 		flag.PrintDefaults()
 	}
@@ -69,8 +70,14 @@ func main() {
 	}
 
 	var target string
+	var command string
+
 	if len(flag.Args()) > 0 {
 		target = flag.Arg(0)
+
+		if len(flag.Args()) > 1 {
+			command = flag.Arg(1)
+		}
 	}
 
 	config, err := sshlib.LoadConfig(".sshw.yml")
@@ -100,17 +107,33 @@ func main() {
 	}
 	log.Printf("connect server ssh -p %d %s@%s version: %s\n\n", node.Port, node.User, node.Host, string(client.CurrentClient().ServerVersion()))
 
-	fd, state, err := client.RequestTerminal()
-	defer client.RestoreTerminal(fd, state)
-	if err != nil {
-		log.Fatal(err)
+	// request terminal if needed
+	if command == "" || *T {
+		fd, state, err := client.RequestTerminal()
+		defer client.RestoreTerminal(fd, state)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
-	if err = client.Shell(); err != nil {
-		log.Fatal(err)
-	}
+	// Shell / Start command / Run command
+	if command == "" {
+		if err = client.Shell(); err != nil {
+			log.Fatal(err)
+		}
+		client.Wait()
 
-	client.Wait()
+	} else if *T {
+		if err = client.Start(command); err != nil {
+			log.Fatal(err)
+		}
+		client.Wait()
+
+	} else {
+		if _, err = client.Run(command); err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 

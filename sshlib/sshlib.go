@@ -156,14 +156,17 @@ func (c *SSHClient) Shell() error {
 	return c.session.Shell()
 }
 
-// Run cmd (Does not need terminal)
-func (c *SSHClient) Run(cmd string) error {
-	return c.session.Run(cmd)
-}
-
 // Start cmd (Need terminal)
 func (c *SSHClient) Start(cmd string) error {
-	return c.session.Start(cmd)
+	err := c.session.Start(cmd)
+	return err
+}
+
+// Run cmd and get its output (Does not need terminal)
+func (c *SSHClient) Run(cmd string) (output string, err error) {
+	err = c.session.Run(cmd)
+	output = string(c.ReadUntilEOF())
+	return
 }
 
 func (c *SSHClient) Wait() error {
