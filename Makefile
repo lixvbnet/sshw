@@ -19,5 +19,5 @@ package: clean
 clean:
 	rm -rf $(DIST_DIR)
 
-t:
-	echo ""
+
+.PHONY: build install test package clean
