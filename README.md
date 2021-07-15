@@ -77,4 +77,4 @@ nodes:
 sshw [options] [target] [command]
 ```
 
-where `target` is of the form `[user[:pass]@]host`. Run `sshw -h` for a list of all available options.
+where `target` is of the form `[user[:pass]@]host`. Run `sshw -h` for a full list of available options.
