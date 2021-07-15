@@ -98,7 +98,7 @@ func (c *SSHClient) LoginAuth(user string, authMethods []ssh.AuthMethod) (err er
 	return nil
 }
 
-func (c *SSHClient) Shell() (fd int, state *term.State, err error) {
+func (c *SSHClient) RequestTerminal() (fd int, state *term.State, err error) {
 	// *********** TERMINAL related ************ //
 	fd = int(os.Stdin.Fd())
 	state, err = terminal.MakeRaw(fd)
@@ -144,14 +144,26 @@ func (c *SSHClient) Shell() (fd int, state *term.State, err error) {
 			time.Sleep(time.Second)
 		}
 	}()
-
-	// Start Shell
-	err = c.session.Shell()
 	return
 }
 
 func (c *SSHClient) RestoreTerminal(fd int, state *term.State) error {
 	return terminal.Restore(fd, state)
+}
+
+// Interactive Shell (Need terminal)
+func (c *SSHClient) Shell() error {
+	return c.session.Shell()
+}
+
+// Run cmd (Does not need terminal)
+func (c *SSHClient) Run(cmd string) error {
+	return c.session.Run(cmd)
+}
+
+// Start cmd (Need terminal)
+func (c *SSHClient) Start(cmd string) error {
+	return c.session.Start(cmd)
 }
 
 func (c *SSHClient) Wait() error {

@@ -99,9 +99,14 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Printf("connect server ssh -p %d %s@%s version: %s\n\n", node.Port, node.User, node.Host, string(client.CurrentClient().ServerVersion()))
-	fd, state, err := client.Shell()
+
+	fd, state, err := client.RequestTerminal()
 	defer client.RestoreTerminal(fd, state)
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err = client.Shell(); err != nil {
 		log.Fatal(err)
 	}
 

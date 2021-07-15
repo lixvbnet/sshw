@@ -13,11 +13,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fd, state, err := client.Shell()
+
+	fd, state, err := client.RequestTerminal()
 	defer client.RestoreTerminal(fd, state)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	client.Shell()
 
 	client.Wait()
 }
