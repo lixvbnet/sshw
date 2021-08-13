@@ -1,5 +1,5 @@
 DIST_DIR	= dist
-NAME 		= sshw
+NAME 		= $(shell basename $$PWD)
 VER 		= 1.0
 LD_FLAGS	= -X 'main.Name=$(NAME)' -X 'main.Version=$(VER)' -X 'main.GitHash=`git rev-parse --short=8 HEAD`'
 

@@ -20,7 +20,7 @@ buildTarget() {
 }
 
 #dist_dir=dist
-#name=sshw
+#name=$(basename $PWD)
 #version=1.0
 #flags="-ldflags=\"-X 'main.CMD=$name' -X 'main.Version=$version'\""
 
