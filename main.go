@@ -7,6 +7,7 @@ import (
 	"github.com/manifoldco/promptui"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -33,7 +34,7 @@ var (
 
 func main() {
 	flag.Usage = func() {
-		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] [target] [command]\n", os.Args[0])
+		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] [target] [command]\n", filepath.Base(os.Args[0]))
 		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "options\n")
 		flag.PrintDefaults()
 	}
