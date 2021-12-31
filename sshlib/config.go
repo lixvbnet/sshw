@@ -6,8 +6,10 @@ import (
 	"golang.org/x/crypto/ssh"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"os"
 	"os/user"
 	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -162,9 +164,14 @@ func loadConfigBytes(filenames []string) (bytes []byte, err error) {
 			return bytes, nil
 		}
 	}
-	// relative
+	// executable dir
+	exe, err := os.Executable()
+	if err != nil {
+		return nil, err
+	}
+	exeDir := filepath.Dir(exe)
 	for _, filename := range filenames {
-		bytes, err = ioutil.ReadFile(filename)
+		bytes, err = ioutil.ReadFile(path.Join(exeDir, filename))
 		if err == nil {
 			return bytes, nil
 		}

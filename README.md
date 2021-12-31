@@ -44,7 +44,7 @@ go get https://github.com/lixvbnet/sshw
 
 ## config
 
-put config file `.sshw` or `.sshw.yml` in home directory or in the same directory of the binary.
+put config file `.sshw.yml` in home directory or in the same directory of the binary.
 
 [config example](./sshlib/config_example.yml):
 
