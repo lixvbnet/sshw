@@ -22,5 +22,11 @@ func main() {
 
 	client.Shell()
 
+	// Do some I/O conversation
+	const PROMPT = "~] "
+	client.ReadUntil(PROMPT)
+	client.WriteLine("echo hello")
+	client.ReadUntil(PROMPT)
+
 	client.Wait()
 }
