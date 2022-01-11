@@ -11,6 +11,24 @@ ssh client wrapper for automatic login.
 - Run / Start Command
 ![](./resources/03.gif)
 
+- And if you need to manage a bunch of hosts under the same domain, such as
+
+  ```
+  hostA.your.domain.com
+  hostB.your.domain.com
+  hostC.your.domain.com
+  ...
+  ```
+
+  you can write your domain in the config file (see `config` section below), and then you can just specify ***short hostname*** in the command line.
+
+  ```shell
+  sshw root@hostA
+  ```
+
+   `sshw` will concatenate domain name for you. FQDN won't be affected. (Note: make sure there is no `.` in your ***short hostname*** otherwise `sshw` would consider it as an FQDN.)
+
+
 This is a fork of [yinheli/sshw](https://github.com/yinheli/sshw), with the following features added:
 
 - Support setting default user/password
