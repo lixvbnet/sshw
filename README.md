@@ -3,13 +3,13 @@
 ssh client wrapper for automatic login.
 
 - Select / Search / Login
-![](./resources/01.gif)
+  ![](./resources/01.gif)
 
 - Use Command Line Arguments
-![](./resources/02.gif)
+  ![](./resources/02.gif)
 
 - Run / Start Command
-![](./resources/03.gif)
+  ![](./resources/03.gif)
 
 - And if you need to manage a bunch of hosts under the same domain, such as
 
@@ -28,7 +28,9 @@ ssh client wrapper for automatic login.
 
    `sshw` will concatenate domain name for you. FQDN won't be affected. (Note: make sure there is no `.` in your ***short hostname*** otherwise `sshw` would consider it as an FQDN.)
 
+- AND you need to set separate default passwords for different users? Just config them in "settings - logins" section (see config section below. With that example config, when you connect with user admin such as `sshw admin@host` or `sshw -u admin` , the password for admin user, in this case "password", will be used; but if a user is not configured, default password will be used.)
 
+---
 This is a fork of [yinheli/sshw](https://github.com/yinheli/sshw), with the following features added:
 
 - Support setting default user/password
@@ -68,6 +70,8 @@ This is a fork of [yinheli/sshw](https://github.com/yinheli/sshw), with the foll
 ```shell
 go get https://github.com/lixvbnet/sshw
 ```
+
+or download pre-compiled binaries from [Releases](https://github.com/lixvbnet/sshw/releases) page.
 
 ## config
 
