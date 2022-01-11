@@ -3,6 +3,10 @@ settings:
   logins:
     - user: admin
       password: password
+    - user: testuser
+      password: testpass
+    - user: anotheruser
+      password: anotherpass
 
 default:
   user: root

@@ -2,6 +2,15 @@
 
 ssh client wrapper for automatic login.
 
+- Select / Search / Login
+![](./resources/01.gif)
+
+- Use Command Line Arguments
+![](./resources/02.gif)
+
+- Run / Start Command
+![](./resources/03.gif)
+
 This is a fork of [yinheli/sshw](https://github.com/yinheli/sshw), with the following features added:
 
 - Support setting default user/password
@@ -54,6 +63,10 @@ settings:
   logins:
     - user: admin
       password: password
+    - user: testuser
+      password: testpass
+    - user: anotheruser
+      password: anotherpass
 
 default:
   user: root
