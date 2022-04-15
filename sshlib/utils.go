@@ -4,8 +4,9 @@ import "strings"
 
 // Get node from target, or choose from menu, and then override fields with overrider.
 // chosen will be ignored if target is not empty.
+// If defaultsOnly is set to true, empty values will only be covered with defaults, logins section will not be used.
 // Values in overrider have top priority.
-func GetNode(config *Config, target string, chosen *Node, overrider *Node) (node *Node) {
+func GetNode(config *Config, target string, chosen *Node, defaultsOnly bool, overrider *Node) (node *Node) {
 	if target != "" {
 		node = parseTarget(config, target)
 	} else {
@@ -21,7 +22,7 @@ func GetNode(config *Config, target string, chosen *Node, overrider *Node) (node
 	}
 
 	if config != nil {
-		if config.Settings != nil {
+		if !defaultsOnly && config.Settings != nil {
 			node.SetLogin(config.Settings.Logins, target == "") // override if target is empty (i.e. using chosen)
 		}
 		node.SetDefaults(config.Defaults, config.Settings)

@@ -24,6 +24,7 @@ var (
 	U     = flag.String("u", "", "user")
 	PASS  = flag.Bool("pass", false, "enter password promptly")
 	T     = flag.Bool("t", false, "request terminal")
+	D     = flag.Bool("d", false, "for empty values, only cover with defaults, logins section will not be used")
 
 	templates = &promptui.SelectTemplates{
 		Label:    "✨ {{ . | green}}",
@@ -91,7 +92,7 @@ func main() {
 	if target == "" {
 		chosen = choose(config.Nodes)
 	}
-	node := sshlib.GetNode(config, target, chosen, overrider)
+	node := sshlib.GetNode(config, target, chosen, *D, overrider)
 	if node == nil {
 		return
 	}

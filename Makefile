@@ -1,6 +1,6 @@
 DIST_DIR	= dist
 NAME 		= $(shell basename $$PWD)
-VER 		= 1.0
+VER 		= 1.1
 LD_FLAGS	= -X 'main.Name=$(NAME)' -X 'main.Version=$(VER)' -X 'main.GitHash=`git rev-parse --short=8 HEAD`'
 
 build:

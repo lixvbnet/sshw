@@ -186,7 +186,7 @@ func TestGetNode(t *testing.T) {
 
 	for _, test := range tests {
 		c := getConfig()
-		if got := GetNode(c, test.target, &test.chosen, &test.overrider); *got != test.want {
+		if got := GetNode(c, test.target, &test.chosen, false, &test.overrider); *got != test.want {
 			t.Errorf("\n//desc: %v\ntarget: %v\nchosen: %v\noverrider: %v\nwant: %v\ngot: %v\n",
 				test.desc, test.target, test.chosen, test.overrider, test.want, got)
 		}
