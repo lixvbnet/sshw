@@ -6,10 +6,10 @@ buildTarget() {
   name=$2
   os=$3
   arch=$4
-  version=$5
-  flags=$6
+  flags=$5
 
-  folder=$name-$os-$arch-$version
+  version=$(grep "\bVersion\b" version.go | grep -E -o "(\d+)((\.{1}\d+)*)(\.{0})")
+  folder=$name-$version-$os-$arch
   folderPath=$dist_dir/$folder
 
   echo "---------------------------------------------"
@@ -21,17 +21,15 @@ buildTarget() {
 
 #dist_dir=dist
 #name=$(basename $PWD)
-#version=1.0
-#flags="-ldflags=\"-X 'main.CMD=$name' -X 'main.Version=$version'\""
+#flags="-ldflags=\"-X 'main.CMD=$name'\""
 
 dist_dir=$1
 name=$2
-version=$3
-flags=$4
+flags=$3
 
 
 for os in "${OS_LIST[@]}"; do
   for arch in "${ARCH_LIST[@]}"; do
-    buildTarget "$dist_dir" "$name" "$os" "$arch" "$version" "$flags"
+    buildTarget "$dist_dir" "$name" "$os" "$arch" "$flags"
   done
 done

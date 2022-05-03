@@ -12,19 +12,13 @@ import (
 )
 
 var (
-	Name    string
-	Version string
-	GitHash string
-)
-
-var (
 	V     = flag.Bool("v", false, "show version")
 	H     = flag.Bool("h", false, "show help and exit")
 	P     = flag.Int("p", 0, "port")
 	U     = flag.String("u", "", "user")
 	PASS  = flag.Bool("pass", false, "enter password promptly")
 	T     = flag.Bool("t", false, "request terminal")
-	D     = flag.Bool("d", false, "for empty values, only cover with defaults, logins section will not be used")
+	D     = flag.Bool("d", false, "only cover with defaults (ignore logins section)")
 
 	templates = &promptui.SelectTemplates{
 		Label:    "✨ {{ . | green}}",
@@ -51,7 +45,7 @@ func main() {
 	}
 
 	if *V {
-		fmt.Printf("%s version %s (%s)\n", Name, Version, GitHash)
+		fmt.Printf("%s version %s %s\n", Name, Version, GitHash)
 		return
 	}
 
