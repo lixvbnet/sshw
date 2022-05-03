@@ -68,7 +68,7 @@ This is a fork of [yinheli/sshw](https://github.com/yinheli/sshw), with the foll
 
 ## install
 ```shell
-go get https://github.com/lixvbnet/sshw
+go get github.com/lixvbnet/sshw
 ```
 
 or download pre-compiled binaries from [Releases](https://github.com/lixvbnet/sshw/releases) page.
