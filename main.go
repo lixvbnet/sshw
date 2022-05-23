@@ -19,6 +19,7 @@ var (
 	PASS  = flag.Bool("pass", false, "enter password promptly")
 	T     = flag.Bool("t", false, "request terminal")
 	D     = flag.Bool("d", false, "only cover with defaults (ignore logins section)")
+	G     = flag.Bool("G", false, "print ssh info after evaluating config and flags")
 
 	templates = &promptui.SelectTemplates{
 		Label:    "✨ {{ . | green}}",
@@ -88,6 +89,14 @@ func main() {
 	}
 	node := sshlib.GetNode(config, target, chosen, *D, overrider)
 	if node == nil {
+		return
+	}
+
+	if *G {
+		fmt.Printf("hostname %s\n", node.Host)
+		fmt.Printf("port %d\n", node.Port)
+		fmt.Printf("user %s\n", node.User)
+		// fmt.Printf("password %s\n", node.Password)
 		return
 	}
 

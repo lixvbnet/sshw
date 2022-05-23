@@ -71,6 +71,7 @@ func parseTarget(config *Config, target string) *Node {
 }
 
 func findAlias(nodes []*Node, nodeAlias string) *Node {
+	nodeAlias = strings.TrimSpace(nodeAlias)
 	for _, node := range nodes {
 		if node.Alias == nodeAlias {
 			return node
