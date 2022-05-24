@@ -1,6 +1,6 @@
 package main
 
-const Version = "1.1"
+const Version = "1.2"
 
 var Name = "sshw"
 var GitHash string
