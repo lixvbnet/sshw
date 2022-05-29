@@ -8,7 +8,8 @@ buildTarget() {
   arch=$4
   flags=$5
 
-  version=$(grep "\bVersion\b" version.go | grep -E -o "(\d+)((\.{1}\d+)*)(\.{0})")
+  # grep line 'const Version = ""'
+  version=$(grep -E "const\b\s*\bVersion\s*=" main.go | grep -E -o "(\d+)((\.{1}\d+)*)(\.{0})")
   folder=$name-$version-$os-$arch
   folderPath=$dist_dir/$folder
 

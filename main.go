@@ -11,6 +11,10 @@ import (
 	"strings"
 )
 
+const Version = "1.2"
+var Name = filepath.Base(os.Args[0])
+var GitHash string
+
 var (
 	V     = flag.Bool("v", false, "show version")
 	H     = flag.Bool("h", false, "show help and exit")
@@ -30,7 +34,7 @@ var (
 
 func main() {
 	flag.Usage = func() {
-		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] [target] [command]\n", filepath.Base(os.Args[0]))
+		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] [target] [command]\n", Name)
 		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "options\n")
 		flag.PrintDefaults()
 	}
