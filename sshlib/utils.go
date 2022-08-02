@@ -16,14 +16,15 @@ func GetNode(config *Config, target string, chosen *Node, defaultsOnly bool, ove
 		return
 	}
 
-	// override fields with overrider, to make overrider.User visible to following tasks
-	if overrider != nil {
-		CoverDefaults(node, overrider, true)
+	// special case: when username is overriden, reset credentials
+	if overrider != nil && overrider.User != "" && overrider.User != node.User {
+		node.User = overrider.User
+		node.Password = ""
 	}
 
 	if config != nil {
 		if !defaultsOnly && config.Settings != nil {
-			node.SetLogin(config.Settings.Logins, target == "") // override if target is empty (i.e. using chosen)
+			node.SetLogin(config.Settings.Logins, false)
 		}
 		node.SetDefaults(config.Defaults, config.Settings)
 	}
