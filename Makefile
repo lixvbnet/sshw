@@ -11,7 +11,7 @@ install:
 test:
 	cd sshlib && go test -v
 
-package: clean
+package: clean test
 	sh build.sh $(DIST_DIR) $(NAME) "-ldflags=\"$(LD_FLAGS)\""
 
 
