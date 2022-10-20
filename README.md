@@ -30,43 +30,8 @@ ssh client wrapper for automatic login.
 
 - AND you need to set separate default passwords for different users? Just config them in "settings - logins" section (see config section below. With that example config, when you connect with user admin such as `sshw admin@host` or `sshw -u admin` , the password for admin user, in this case "password", will be used; but if a user is not configured, default password will be used.)
 
----
-This is a fork of [yinheli/sshw](https://github.com/yinheli/sshw), with the following features added:
-
-- Support setting default user/password
-- Support short hostnames by setting up domain ( concatenated as `hostname.domain` )
-- Support command line arguments
-  ```shell
-  sshw user:pass@host
-  # use default password
-  sshw user@host
-  # use default user/password
-  sshw host
-  ```
-- Support using flags before selecting host from list
-  ```shell
-  # use specified user and default password for selected host
-  sshw -u admin
-  # use specified user and password (will prompt for input) for selected host
-  sshw -u admin -pass
-  # use specified port for selected host
-  sshw -p 33
-  ```
-- Or even using both (The flags have top priority)
-  ```shell
-  # will prompt for password
-  sshw -pass user@host
-  ```
-- Run command on host
-  ```shell
-  # run command and get its output
-  sshw -pass user@host "echo hello"
-  # request a terminal and start command
-  sshw -t -pass user@host "/bin/bash"
-  ```
-- Support more ciphers and kex algorithms
-
 ## install
+
 ```shell
 go get github.com/lixvbnet/sshw
 ```
@@ -108,8 +73,47 @@ nodes:
 ```
 
 ## usage
+
 ```shell
 sshw [options] [target] [command]
 ```
 
 where `target` is of the form `[user[:pass]@]host`. Run `sshw -h` for a full list of available options.
+
+---
+This is a complete rewrite, except the UI interface, of [yinheli/sshw](https://github.com/yinheli/sshw) for extensibility. And the following features were added:
+
+- Support setting default user/password
+- Support short hostnames by setting up domain ( concatenated as `hostname.domain` )
+- Support command line arguments
+  ```shell
+  sshw user:pass@host
+  # use default password
+  sshw user@host
+  # use default user/password
+  sshw host
+  ```
+- Support using flags before selecting host from list
+  ```shell
+  # use specified user and default password for selected host
+  sshw -u admin
+  # use specified user and password (will prompt for input) for selected host
+  sshw -u admin -pass
+  # use specified port for selected host
+  sshw -p 33
+  ```
+- Or even using both (The flags have top priority)
+  ```shell
+  # will prompt for password
+  sshw -pass user@host
+  ```
+- Run command on host
+  ```shell
+  # run command and get its output
+  sshw -pass user@host "echo hello"
+  # request a terminal and start command
+  sshw -t -pass user@host "/bin/bash"
+  ```
+- Support more ciphers and kex algorithms
+
+
