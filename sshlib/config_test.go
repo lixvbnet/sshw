@@ -115,7 +115,7 @@ func TestGetNode(t *testing.T) {
 				Name: "Node B",
 				Alias: "nodeB",
 				User: "admin",
-				Password: "passwordB",
+				Password: "passwordAdmin",
 				Host: "hostB.com",
 				Port: 22,
 			},
@@ -131,7 +131,7 @@ func TestGetNode(t *testing.T) {
 				Name: "Node A",
 				Alias: "nodeA",
 				User: "NewUser",
-				Password: "default_password",
+				Password: "passwordA",
 				Host: "hostA."+config.Settings.Domain,
 				Port: 22,
 			},
@@ -185,12 +185,10 @@ func TestGetNode(t *testing.T) {
 	}
 
 	for _, test := range tests {
-        t.Run(test.desc, func(t *testing.T) {
-            c := getConfig()
-            if got := GetNode(c, test.target, &test.chosen, false, &test.overrider); *got != test.want {
-                t.Errorf("\n//desc: %v\ntarget: %v\nchosen: %v\noverrider: %v\nwant: %v\ngot: %v\n",
-                    test.desc, test.target, test.chosen, test.overrider, test.want, got)
-            }
-        })
+		c := getConfig()
+		if got := GetNode(c, test.target, &test.chosen, false, &test.overrider); *got != test.want {
+			t.Errorf("\n//desc: %v\ntarget: %v\nchosen: %v\noverrider: %v\nwant: %v\ngot: %v\n",
+				test.desc, test.target, test.chosen, test.overrider, test.want, got)
+		}
 	}
 }
