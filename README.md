@@ -33,7 +33,7 @@ ssh client wrapper for automatic login.
 ## install
 
 ```shell
-go get github.com/lixvbnet/sshw
+go install github.com/lixvbnet/sshw@latest
 ```
 
 or download pre-compiled binaries from [Releases](https://github.com/lixvbnet/sshw/releases) page.
