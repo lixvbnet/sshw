@@ -25,6 +25,7 @@ var (
 	D     = flag.Bool("d", false, "only cover with defaults (ignore logins section)")
 	DEBUG = flag.Bool("debug", false, "print debug logs")
 	G     = flag.Bool("G", false, "print ssh info after evaluating config and flags")
+	Q     = flag.Bool("q", false, "quiet mode (avoid interaction)")
 
 	templates = &promptui.SelectTemplates{
 		Label:    "✨ {{ . | green}}",
@@ -90,7 +91,13 @@ func main() {
 	// Get node from target, or choose from menu
 	var chosen *sshlib.Node
 	if target == "" {
-		chosen = choose(config.Nodes)
+		if *Q {
+			if *DEBUG {
+				fmt.Println("quiet mode. skip interaction")
+			}
+		} else {
+			chosen = choose(config.Nodes)
+		}
 	}
 	node := sshlib.GetNode(config, target, chosen, *D, overrider)
 	if node == nil {
