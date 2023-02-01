@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const Version = "1.3"
+const Version = "1.3.1"
 var Name = filepath.Base(os.Args[0])
 var GitHash string
 
@@ -61,15 +61,21 @@ func main() {
 	overrider.Port = *P
 	overrider.User = *U
 	if *PASS {
-		prompt := promptui.Prompt{
-			Label: "Enter password",
-			Mask: '*',
+		if *Q {
+			if *DEBUG {
+				fmt.Println("quiet mode. skip interaction")
+			}
+		} else {
+			prompt := promptui.Prompt{
+				Label: "Enter password",
+				Mask: '*',
+			}
+			password, err := prompt.Run()
+			if err != nil {
+				log.Fatal(err)
+			}
+			overrider.Password = password
 		}
-		password, err := prompt.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-		overrider.Password = password
 	}
 
 	var target string
