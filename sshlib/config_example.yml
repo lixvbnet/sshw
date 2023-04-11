@@ -19,7 +19,7 @@ nodes:
     host: 192.168.1.10
 
   - name: nodeB
-    alias: nodeB
+    alias: nodeB,secondNode,11
     host: 192.168.1.11
     user: root
     password: Password

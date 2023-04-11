@@ -42,9 +42,9 @@ func parseTarget(config *Config, target string) *Node {
 
 	var node *Node
 
-	// try as alias
+	// try as name or alias
 	if !strings.Contains(target, "@") {
-		node = findAlias(config.Nodes, target)
+		node = findByNameOrAlias(config.Nodes, target)
 	}
 	if node == nil {
 		// login by args
@@ -55,7 +55,7 @@ func parseTarget(config *Config, target string) *Node {
 			arr := strings.Split(target, "@")
 			node.Host = arr[1]
 			// try as alias
-			aliasNode := findAlias(config.Nodes, node.Host)
+			aliasNode := findByNameOrAlias(config.Nodes, node.Host)
 			if aliasNode != nil {
 				node = aliasNode
 			}
@@ -70,11 +70,16 @@ func parseTarget(config *Config, target string) *Node {
 	return node
 }
 
-func findAlias(nodes []*Node, nodeAlias string) *Node {
-	nodeAlias = strings.TrimSpace(nodeAlias)
+func findByNameOrAlias(nodes []*Node, target string) *Node {
+	target = strings.TrimSpace(target)
 	for _, node := range nodes {
-		if node.Alias == nodeAlias {
+		if node.Name == target {
 			return node
+		}
+		for _, alias := range strings.Split(node.Alias, ",") {
+			if alias == target {
+				return node
+			}
 		}
 	}
 	return nil

@@ -66,7 +66,7 @@ nodes:
     host: 192.168.1.10
 
   - name: nodeB
-    alias: nodeB
+    alias: nodeB,secondNode,11
     host: 192.168.1.11
     user: root
     password: Password
@@ -78,7 +78,7 @@ nodes:
 sshw [options] [target] [command]
 ```
 
-where `target` is of the form `[user[:pass]@]host`. Run `sshw -h` for a full list of available options.
+where `target` is of the form `[user[:pass]@]host`. A `host` can be an FQDN, short hostname, configured node name or alias. Run `sshw -h` for a full list of available options.
 
 ---
 This is a complete rewrite, except the UI interface, of [yinheli/sshw](https://github.com/yinheli/sshw) for extensibility. And the following features were added:
