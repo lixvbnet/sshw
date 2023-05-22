@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const Version = "1.3.2"
+const Version = "1.4"
 var Name = filepath.Base(os.Args[0])
 var GitHash string
 

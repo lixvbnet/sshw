@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"golang.org/x/crypto/ssh"
+	"golang.org/x/crypto/ssh/terminal"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -102,6 +103,32 @@ func (n *Node) AuthMethods() (authMethods []ssh.AuthMethod) {
 	if rsaAuth != nil {
 		authMethods = append(authMethods, rsaAuth)
 	}
+	// MFA auth (Keyboard Interactive)
+	mfaAuth := ssh.KeyboardInteractive(func(name, instruction string, questions []string, echos []bool) ([]string, error) {
+		answers := make([]string, len(questions))
+		for i, question := range questions {
+			if question == "Password: " && n.Password != "" {
+				answers[i] = n.Password
+				continue
+			}
+			fmt.Print(question)
+			// if echo is true, display user input
+			if echos[i] {
+				if _, err := fmt.Scan(&answers[i]); err != nil {
+					return nil, err
+				}
+			} else {
+				answer, err := terminal.ReadPassword(int(os.Stdin.Fd()))
+				fmt.Println()
+				if err != nil {
+					return nil, err
+				}
+				answers[i] = string(answer)
+			}
+		}
+		return answers, nil
+	})
+	authMethods = append(authMethods, mfaAuth)
 	// Password auth
 	if n.Password != "" {
 		authMethods = append(authMethods, ssh.Password(n.Password))
