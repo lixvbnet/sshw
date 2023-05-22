@@ -5,6 +5,7 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 	"golang.org/x/term"
 	"io"
+	"log"
 	"net"
 	"os"
 	"strconv"
@@ -82,6 +83,10 @@ func (c *SSHClient) LoginAuth(user string, authMethods []ssh.AuthMethod) (err er
 
 	// open a session
 	c.session, err = c.client.NewSession()
+	if err != nil {
+		log.Fatal("create session failed: ", err)
+		return
+	}
 
 	// *********** I/O *********** //
 	stdoutPipe, err := c.session.StdoutPipe()
