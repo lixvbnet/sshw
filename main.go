@@ -3,15 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/lixvbnet/sshw/sshlib"
-	"github.com/manifoldco/promptui"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/lixvbnet/sshw/sshlib"
+	"github.com/manifoldco/promptui"
 )
 
-const Version = "1.4"
+const Version = "v1.5.0"
 var Name = filepath.Base(os.Args[0])
 var GitHash string
 

@@ -1,15 +1,16 @@
 package sshlib
 
 import (
-	"golang.org/x/crypto/ssh"
-	"golang.org/x/crypto/ssh/terminal"
-	"golang.org/x/term"
 	"io"
 	"log"
 	"net"
 	"os"
 	"strconv"
 	"time"
+
+	"golang.org/x/crypto/ssh"
+	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 var (
@@ -110,7 +111,8 @@ func (c *SSHClient) RequestTerminal() (fd int, state *term.State, err error) {
 	if err != nil {
 		return
 	}
-	w, h, err := terminal.GetSize(fd)
+	// changed fd to int(os.Stdout.Fd()) becaused terminal.GetSize(fd) doesn't work in Windows (https://github.com/golang/go/issues/20388)
+	w, h, err := terminal.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		return
 	}
