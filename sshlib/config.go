@@ -3,15 +3,14 @@ package sshlib
 import (
 	"encoding/json"
 	"fmt"
-	"golang.org/x/crypto/ssh"
-	"golang.org/x/crypto/ssh/terminal"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
 	"os"
-	"os/user"
 	"path"
 	"path/filepath"
 	"strings"
+
+	"golang.org/x/crypto/ssh"
+	"golang.org/x/crypto/ssh/terminal"
+	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
@@ -140,16 +139,16 @@ func (n *Node) rsaAuth() (rsaAuth ssh.AuthMethod, err error) {
 	var pemBytes []byte
 
 	if n.KeyPath == "" {
-		u, err := user.Current()
+		homedir, err := os.UserHomeDir()
 		if err != nil {
 			return nil, nil	// ignore the error
 		}
-		pemBytes, err = ioutil.ReadFile(path.Join(u.HomeDir, ".ssh/id_rsa"))
+		pemBytes, err = os.ReadFile(path.Join(homedir, ".ssh/id_rsa"))
 		if err != nil {
 			return nil, nil	// possibly not exist, ignore
 		}
 	} else {
-		pemBytes, err = ioutil.ReadFile(n.KeyPath)
+		pemBytes, err = os.ReadFile(n.KeyPath)
 		if err != nil {
 			return nil, err
 		}
@@ -180,13 +179,15 @@ func LoadConfig(filenames ...string) (config *Config, err error) {
 }
 
 func loadConfigBytes(filenames []string) (bytes []byte, err error) {
-	u, err := user.Current()
+	// use os.UserHomeDir() instead of user.Current().HomeDir, because the later is very slow in Windows if AD accounts are present.
+	// See https://github.com/golang/go/issues/68312 (As tested, by go 1.23.4, user.Current() is still very slow - takes about 5 seconds!)
+	homedir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, err
 	}
 	// homedir
 	for _, filename := range filenames {
-		bytes, err = ioutil.ReadFile(path.Join(u.HomeDir, filename))
+		bytes, err = os.ReadFile(path.Join(homedir, filename))
 		if err == nil {
 			return bytes, nil
 		}
@@ -198,7 +199,7 @@ func loadConfigBytes(filenames []string) (bytes []byte, err error) {
 	}
 	exeDir := filepath.Dir(exe)
 	for _, filename := range filenames {
-		bytes, err = ioutil.ReadFile(path.Join(exeDir, filename))
+		bytes, err = os.ReadFile(path.Join(exeDir, filename))
 		if err == nil {
 			return bytes, nil
 		}

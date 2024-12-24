@@ -12,7 +12,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-const Version = "v1.5.0"
+const Version = "v1.5.1"
 var Name = filepath.Base(os.Args[0])
 var GitHash string
 
