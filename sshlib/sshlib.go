@@ -135,7 +135,8 @@ func (c *SSHClient) RequestTerminal() (fd int, state *term.State, err error) {
 			oh = h
 		)
 		for {
-			cw, ch, err := terminal.GetSize(fd)
+			// changed fd to int(os.Stdout.Fd()) becaused terminal.GetSize(fd) doesn't work in Windows (https://github.com/golang/go/issues/20388)
+			cw, ch, err := terminal.GetSize(int(os.Stdout.Fd()))
 			if err != nil {
 				break
 			}
@@ -185,7 +186,7 @@ func (c *SSHClient) Wait() error {
 		}
 	}()
 
-	// continue reading remote output
+	// keep reading remote output
 	go func() {
 		buf := make([]byte, 1024)
 		for {
@@ -193,15 +194,22 @@ func (c *SSHClient) Wait() error {
 			if err != nil {
 				c.session.Close()
 				c.client.Close()
+				break
 			}
 		}
 	}()
 
 	// change stdin to user
 	go func() {
-		_, err := io.Copy(c, os.Stdin)
-		if err != nil {
-			panic(err)
+		// loop io.Copy as it might also return with err == nil in some rare cases
+		// (e.g. when using Windows Terminal, press PAUSE key Fn + B)
+		for {
+			_, err := io.Copy(c, os.Stdin)
+			if err != nil {
+				c.session.Close()
+				c.client.Close()
+				break
+			}
 		}
 	}()
 
