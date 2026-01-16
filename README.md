@@ -80,6 +80,11 @@ sshw [options] [target] [command]
 
 where `target` is of the form `[user[:pass]@]host`. A `host` can be an FQDN, short hostname, configured node name or alias. Run `sshw -h` for a full list of available options.
 
+## security
+
+Storing plaintext password is intended to be used for managing a bunch of pipeline machines which are constantly reinstalled but have a set of default passwords. Other than that scenario, you should instead generate an SSH keypair and upload the public key to remote server. `sshw` will load your private key at `~/.ssh/id_rsa` .
+
+
 ---
 This is a complete rewrite, except the UI interface, of [yinheli/sshw](https://github.com/yinheli/sshw) for extensibility. And the following features were added:
 
