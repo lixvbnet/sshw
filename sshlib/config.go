@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 
@@ -143,7 +142,7 @@ func (n *Node) rsaAuth() (rsaAuth ssh.AuthMethod, err error) {
 		if err != nil {
 			return nil, nil	// ignore the error
 		}
-		pemBytes, err = os.ReadFile(path.Join(homedir, ".ssh/id_rsa"))
+		pemBytes, err = os.ReadFile(filepath.Join(homedir, ".ssh", "id_rsa"))
 		if err != nil {
 			return nil, nil	// possibly not exist, ignore
 		}
@@ -185,11 +184,21 @@ func loadConfigBytes(filenames []string) (bytes []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
+
+	var attemptedPaths []string
+	var lastErr error
+
 	// homedir
 	for _, filename := range filenames {
-		bytes, err = os.ReadFile(path.Join(homedir, filename))
-		if err == nil {
+		configPath := filepath.Join(homedir, filename)
+		attemptedPaths = append(attemptedPaths, configPath)
+		bytes, lastErr = os.ReadFile(configPath)
+		if lastErr == nil {
 			return bytes, nil
+		}
+		if !os.IsNotExist(lastErr) {
+			// File exists but cannot be read (permission denied, disk error, etc.)
+			return nil, lastErr
 		}
 	}
 	// executable dir
@@ -199,10 +208,17 @@ func loadConfigBytes(filenames []string) (bytes []byte, err error) {
 	}
 	exeDir := filepath.Dir(exe)
 	for _, filename := range filenames {
-		bytes, err = os.ReadFile(path.Join(exeDir, filename))
-		if err == nil {
+		configPath := filepath.Join(exeDir, filename)
+		attemptedPaths = append(attemptedPaths, configPath)
+		bytes, lastErr = os.ReadFile(configPath)
+		if lastErr == nil {
 			return bytes, nil
 		}
+		if !os.IsNotExist(lastErr) {
+			// File exists but cannot be read (permission denied, disk error, etc.)
+			return nil, lastErr
+		}
 	}
-	return nil, err
+	// All files do not exist
+	return nil, fmt.Errorf("config file not found in the following locations: %s", strings.Join(attemptedPaths, ", "))
 }
