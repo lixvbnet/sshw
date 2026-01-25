@@ -185,9 +185,14 @@ func loadConfigBytes(filenames []string) (bytes []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
+
+	var attemptedPaths []string
+
 	// homedir
 	for _, filename := range filenames {
-		bytes, err = os.ReadFile(path.Join(homedir, filename))
+		configPath := path.Join(homedir, filename)
+		attemptedPaths = append(attemptedPaths, configPath)
+		bytes, err = os.ReadFile(configPath)
 		if err == nil {
 			return bytes, nil
 		}
@@ -199,10 +204,12 @@ func loadConfigBytes(filenames []string) (bytes []byte, err error) {
 	}
 	exeDir := filepath.Dir(exe)
 	for _, filename := range filenames {
-		bytes, err = os.ReadFile(path.Join(exeDir, filename))
+		configPath := path.Join(exeDir, filename)
+		attemptedPaths = append(attemptedPaths, configPath)
+		bytes, err = os.ReadFile(configPath)
 		if err == nil {
 			return bytes, nil
 		}
 	}
-	return nil, err
+	return nil, fmt.Errorf("config file not found in the following locations: %s", strings.Join(attemptedPaths, ", "))
 }
